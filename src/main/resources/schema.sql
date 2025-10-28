@@ -18,3 +18,11 @@ CREATE TABLE IF NOT EXISTS genres (
     name VARCHAR(256),
     CONSTRAINT PK_GENRE PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS authors (
+    id UUID DEFAULT uuid_generate_v4(),
+    first_name VARCHAR(256),
+    last_name VARCHAR(256),
+    middle_name VARCHAR(256),
+    CONSTRAINT PK_AUTHOR PRIMARY KEY (id)
+);
