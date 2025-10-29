@@ -6,10 +6,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +20,18 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    @Operation(description = "Метод для регистрации пользователя")
+    @Operation(summary = "Метод для регистрации пользователя")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid InputUserDto userDto) {
         return userService.createUser(userDto);
+    }
+
+    @GetMapping("/users/{userId}")
+    @Operation(
+            summary = "Получение пользователя по userId",
+            description = "Данный метод возвращает активного пользователя платформы"
+    )
+    public UserDto getUserByUserId(@PathVariable UUID userId) {
+        return userService.getUserByUserId(userId);
     }
 }
