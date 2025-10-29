@@ -9,27 +9,20 @@ import java.time.LocalDateTime;
 @Component
 public class UserMapper {
     public User toUser(InputUserDto userDto) {
-        try {
-            MessageDigest m = MessageDigest.getInstance("MD5");
-            m.update(userDto.getPassword().getBytes());
-            byte[] digest = m.digest();
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : digest) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-
-            userDto.setPassword(hexString.toString());
-        } catch (Exception ignored) { }
-
         return new User(
                 null,
                 userDto.getEmail(),
-                userDto.getPassword(),
+                hashPassword(userDto.getPassword()),
+                false,
+                LocalDateTime.now()
+        );
+    }
+
+    public User toUser(LoginUserDto userDto) {
+        return new User(
+                null,
+                userDto.getEmail(),
+                hashPassword(userDto.getPassword()),
                 false,
                 LocalDateTime.now()
         );
@@ -41,5 +34,26 @@ public class UserMapper {
                 user.getEmail(),
                 user.getIsActive()
         );
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest m = MessageDigest.getInstance("MD5");
+            m.update(password.getBytes());
+            byte[] digest = m.digest();
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : digest) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (Exception ignored) { }
+
+        return null;
     }
 }

@@ -11,7 +11,13 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(
             "SELECT u FROM User u " +
-            "WHERE (u.id = :uid) AND (u.isActive = true)"
+            "WHERE (u.isActive = true) AND (u.id = :uid)"
     )
-    Optional<User> findByIdActive(@Param("uid") UUID userId);
+    Optional<User> findActiveById(@Param("uid") UUID userId);
+
+    @Query(
+            "SELECT u FROM User u " +
+            "WHERE (u.email = :email) AND (u.password = :pass)"
+    )
+    Optional<User> findByEmailAndPassword(@Param("email") String email, @Param("pass") String password);
 }

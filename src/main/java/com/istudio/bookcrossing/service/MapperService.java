@@ -1,6 +1,7 @@
 package com.istudio.bookcrossing.service;
 
 import com.istudio.bookcrossing.users.dto.InputUserDto;
+import com.istudio.bookcrossing.users.dto.LoginUserDto;
 import com.istudio.bookcrossing.users.dto.UserDto;
 import com.istudio.bookcrossing.users.dto.UserMapper;
 import com.istudio.bookcrossing.users.models.User;
@@ -13,6 +14,14 @@ public class MapperService {
     private final UserMapper userMapper;
 
     public User toUser(InputUserDto userDto) {
+        if (userDto == null) {
+            return null;
+        }
+
+        return userMapper.toUser(userDto);
+    }
+
+    public User toUser(LoginUserDto userDto) {
         if (userDto == null) {
             return null;
         }
